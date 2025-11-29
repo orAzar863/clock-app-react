@@ -74,21 +74,22 @@ function App() {
     if (isRunning) {
       intervalRef.current = setInterval(() => {
         setTimeLeft((prev) => {
-          if (prev === 0) //switch between session and break
-            {
-              if (audioRef.current) {
-                audioRef.current.play();
-              }
-              if (isSession) {
-                setTimerLabel(BREAK_LABEL);
-                setIsSession(false);
-                return breakLength * 60;
-              } else {
-                setTimerLabel(SESSION_LABEL);
-                setIsSession(true);
-                return sessionLength * 60;
-              }
+          if (prev === 0) {
+            if (audioRef.current) {
+              audioRef.current.pause();
+              audioRef.current.currentTime = 0;
+              audioRef.current.play();
             }
+            if (isSession) {
+              setTimerLabel(BREAK_LABEL);
+              setIsSession(false);
+              return breakLength * 60;
+            } else {
+              setTimerLabel(SESSION_LABEL);
+              setIsSession(true);
+              return sessionLength * 60;
+            }
+          }
           return prev - 1;//decrement time
         });
       }, 1000);
